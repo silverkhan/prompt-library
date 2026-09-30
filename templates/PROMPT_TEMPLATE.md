@@ -2,6 +2,7 @@
 id: IMG-EDIT-XXX
 title: 프롬프트 제목
 status: EXPERIMENTAL
+domain: image
 category: image-editing
 task: task-name
 model_family:
@@ -10,6 +11,8 @@ recommended_prompt_language: en
 prompt_languages:
   - ko
   - en
+tags:
+  - example-tag
 
 locks:
   identity: false
@@ -31,23 +34,23 @@ variables:
 
 ### 잘 맞는 용례
 
-- 
+-
 
 ### 피해야 할 용례
 
-- 
+-
 
 ## 변경 대상
 
 이번 작업에서 실제로 변경할 요소를 명시합니다.
 
-- 
+-
 
 ## 고정 대상
 
 모델이 임의로 변경하면 안 되는 요소를 명시합니다.
 
-- 
+-
 
 ## 프롬프트 전송 권장 언어
 
@@ -55,7 +58,7 @@ variables:
 
 권장 이유를 간단히 기록합니다.
 
-> 규칙: 권장 언어가 한글이면 영문 병기를 생략할 수 있습니다. 그 외에는 한글/영문 프롬프트를 함께 관리합니다.
+> 규칙: 권장 언어가 한글이면 영문 병기를 생략할 수 있습니다. 영문 또는 무관이면 한글/영문 프롬프트를 함께 관리합니다.
 
 ## 프롬프트 — 한글
 
@@ -69,18 +72,20 @@ variables:
 Write the English prompt here.
 ```
 
+> 권장 언어가 `ko`인 경우 이 영문 섹션은 생략할 수 있습니다.
+
 ## 사용 방법
 
-1. 
-2. 
+1.
+2.
 
 ## 알려진 실패 패턴
 
-- 
+-
 
-## 검증 기록
+## 검증 메모
 
 - 날짜:
 - 모델:
 - 결과:
-- 관련 Case:
+- 관련 Case: (선택)

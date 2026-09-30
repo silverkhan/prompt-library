@@ -1,8 +1,14 @@
 # prompt-library
 
-검증된 AI 프롬프트와 그 사용 맥락, 실패 사례, 재사용 패턴을 체계적으로 관리하는 개인 프롬프트 라이브러리입니다.
+검증된 AI 프롬프트와 사용 맥락, 실패 패턴, 재사용 규칙을 체계적으로 관리하는 개인 프롬프트 라이브러리입니다.
 
 단순히 "잘 나온 프롬프트 모음"이 아니라, **무엇을 바꾸고 무엇을 고정해야 하는지**, **어떤 표현이 실패를 유발했는지**, **어떤 모델/작업에서 검증되었는지**를 함께 기록하는 것을 원칙으로 합니다.
+
+## 빠른 탐색
+
+전체 프롬프트는 [CATALOG.md](CATALOG.md)에서 표 형태로 탐색합니다.
+
+`CATALOG.md`는 각 프롬프트 문서의 metadata를 읽어 자동 생성되므로 직접 수정하지 않습니다.
 
 ## 문서 작성 원칙
 
@@ -11,9 +17,9 @@
 - 설명, 용례, 실패 원인, 사용법 등 **문서 본문은 한글 중심**으로 작성합니다.
 - 프롬프트는 원칙적으로 **한글/영문을 병기**합니다.
 - 각 프롬프트에는 반드시 **프롬프트 전송 권장 언어**를 표시합니다.
-- 권장 언어가 **한글**인 경우에는 영문 프롬프트를 생략할 수 있습니다.
-- 권장 언어가 **영문**인 경우에는 실제 전송용 영문 프롬프트와 함께 이해/수정용 한글 버전을 제공합니다.
-- 권장 언어가 **무관**한 경우에도 재사용성을 위해 가능하면 한글/영문을 함께 유지합니다.
+- 권장 언어가 **한글(`ko`)**인 경우에는 영문 프롬프트를 생략할 수 있습니다.
+- 권장 언어가 **영문(`en`)**인 경우에는 실제 전송용 영문 프롬프트와 함께 이해/수정용 한글 버전을 제공합니다.
+- 권장 언어가 **무관(`any`)**인 경우에도 재사용성을 위해 한글/영문을 함께 관리합니다.
 
 ### 검증 상태
 
@@ -39,6 +45,7 @@
 ```text
 prompt-library/
 ├── README.md
+├── CATALOG.md
 ├── image/
 │   ├── generation/
 │   └── editing/
@@ -51,18 +58,21 @@ prompt-library/
 ├── video/
 ├── text/
 ├── agents/
-├── cases/
-│   ├── image/
-│   ├── music/
-│   └── video/
-└── templates/
+├── cases/                  # 선택 사항: 상세 실험 기록이 필요할 때만
+├── templates/
+│   └── PROMPT_TEMPLATE.md
+├── scripts/
+│   └── build_catalog.py
+└── .github/
+    └── workflows/
+        └── build-catalog.yml
 ```
 
 Repository 자체가 prompt library이므로 최상위에 별도의 `prompts/` 계층은 두지 않습니다.
 
-## Prompt와 Case의 역할
+## Prompt와 Case
 
-### Prompt
+### Prompt — 기본 관리 단위
 
 실제 다음 작업에서 바로 재사용할 수 있도록 일반화한 프롬프트입니다.
 
@@ -72,24 +82,74 @@ Repository 자체가 prompt library이므로 최상위에 별도의 `prompts/` �
 image/editing/shading/preserve-lighting-anime-shading.md
 ```
 
-### Case
+사용법, 실패 패턴, 검증 메모처럼 재사용에 필요한 정보는 가능한 한 **Prompt 문서 하나에 함께 기록**합니다.
 
-프롬프트가 만들어진 배경과 실제 시행착오를 기록합니다.
+### Case — 선택 사항
 
-- 원본의 상태
-- 원하는 변경
-- 실패한 접근
-- 실패가 발생한 이유
-- 성공한 접근
-- 재사용 시 주의점
+`cases/`는 필수 단계가 아닙니다.
 
-예:
+동일 문제를 반복 실험하거나, 모델별 비교처럼 별도 연구 기록이 가치가 있을 때만 사용합니다. 일반적인 프롬프트 등록을 위해 Case 문서를 추가할 필요는 없습니다.
 
-```text
-cases/image/001-preserve-lighting-anime-shading/CASE.md
+## 자동 카탈로그
+
+`scripts/build_catalog.py`는 Prompt 문서의 YAML front matter를 읽어 다음을 수행합니다.
+
+1. `CATALOG.md` 자동 생성
+2. ID 중복 검사
+3. 필수 metadata 검사
+4. status / 권장 언어 값 검증
+5. 저장소의 한글·영문 병기 정책 검사
+6. `VERIFIED` 문서의 검증일·모델 정보 검사
+
+### 로컬 실행
+
+```bash
+python scripts/build_catalog.py
 ```
 
-이미지가 함께 저장되더라도 **이미지에서만 알 수 있는 핵심 정보는 반드시 텍스트로도 기록**합니다. 이후 AI가 저장소의 텍스트만 읽더라도 성공 조건과 실패 원인을 재구성할 수 있어야 합니다.
+카탈로그를 수정하지 않고 최신 여부만 검사하려면:
+
+```bash
+python scripts/build_catalog.py --check
+```
+
+외부 Python 패키지는 필요하지 않습니다.
+
+### GitHub Actions
+
+`main` 브랜치의 Markdown 프롬프트 또는 카탈로그 생성 코드가 변경되면 GitHub Actions가 자동으로:
+
+```text
+Prompt 추가/수정
+        ↓
+metadata 검증
+        ↓
+CATALOG.md 재생성
+        ↓
+변경이 있으면 자동 commit
+```
+
+합니다.
+
+따라서 새 프롬프트 등록 시 `CATALOG.md`를 사람이 직접 편집할 필요가 없습니다.
+
+## Metadata
+
+기본 예시는 `templates/PROMPT_TEMPLATE.md`를 사용합니다.
+
+주요 필드:
+
+- `id`: 프롬프트 고유 ID
+- `title`: 한글 중심 제목
+- `status`: `VERIFIED | EXPERIMENTAL | DEPRECATED`
+- `domain`: 선택 사항. 생략하면 최상위 디렉터리명에서 자동 추론
+- `category`: 작업 카테고리
+- `task`: 세부 작업 유형
+- `model_family`: 검증 모델/계열
+- `verified_at`: 검증일
+- `recommended_prompt_language`: `ko | en | any`
+- `prompt_languages`: 실제 관리하는 프롬프트 언어 목록
+- `tags`: 검색용 태그(선택)
 
 ## 핵심 설계 원칙
 
