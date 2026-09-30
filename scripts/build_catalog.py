@@ -20,7 +20,6 @@ CATALOG_PATH = ROOT / "CATALOG.md"
 EXCLUDED_TOP_LEVEL = {
     ".git",
     ".github",
-    "cases",
     "scripts",
     "templates",
 }
