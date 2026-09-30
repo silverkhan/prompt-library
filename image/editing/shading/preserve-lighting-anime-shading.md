@@ -233,6 +233,3 @@ anime illustration rather than realistic rendering.
 
 "정면광", "soft beauty lighting", "even lighting" 같은 표현이 섞이면 form shadow가 사라지거나 얼굴이 평면화될 수 있습니다.
 
-## 관련 Case
-
-- `cases/image/001-preserve-lighting-anime-shading/CASE.md`
