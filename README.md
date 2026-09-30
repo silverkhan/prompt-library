@@ -58,7 +58,6 @@ prompt-library/
 ├── video/
 ├── text/
 ├── agents/
-├── cases/                  # 선택 사항: 상세 실험 기록이 필요할 때만
 ├── templates/
 │   └── PROMPT_TEMPLATE.md
 ├── scripts/
@@ -70,11 +69,9 @@ prompt-library/
 
 Repository 자체가 prompt library이므로 최상위에 별도의 `prompts/` 계층은 두지 않습니다.
 
-## Prompt와 Case
+## Prompt 관리 원칙
 
-### Prompt — 기본 관리 단위
-
-실제 다음 작업에서 바로 재사용할 수 있도록 일반화한 프롬프트입니다.
+실제 다음 작업에서 바로 재사용할 수 있도록 일반화한 프롬프트를 기본 관리 단위로 사용합니다.
 
 예:
 
@@ -82,13 +79,7 @@ Repository 자체가 prompt library이므로 최상위에 별도의 `prompts/` �
 image/editing/shading/preserve-lighting-anime-shading.md
 ```
 
-사용법, 실패 패턴, 검증 메모처럼 재사용에 필요한 정보는 가능한 한 **Prompt 문서 하나에 함께 기록**합니다.
-
-### Case — 선택 사항
-
-`cases/`는 필수 단계가 아닙니다.
-
-동일 문제를 반복 실험하거나, 모델별 비교처럼 별도 연구 기록이 가치가 있을 때만 사용합니다. 일반적인 프롬프트 등록을 위해 Case 문서를 추가할 필요는 없습니다.
+사용법, 실패 패턴, 검증 메모처럼 재사용에 필요한 정보는 **해당 Prompt 문서 하나에 함께 기록**합니다. 별도의 Case 문서는 운영하지 않습니다.
 
 ## 자동 카탈로그
 
