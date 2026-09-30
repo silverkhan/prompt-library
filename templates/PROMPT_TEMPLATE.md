@@ -88,4 +88,3 @@ Write the English prompt here.
 - 날짜:
 - 모델:
 - 결과:
-- 관련 Case: (선택)
